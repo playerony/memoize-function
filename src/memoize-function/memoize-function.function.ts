@@ -9,7 +9,7 @@ export const memoizeFunction = <
 
   const cache: Cache = {};
 
-  return (...args: any[]) => {
+  const memoize = (...args: any[]): ReturnType<ResultFunction> => {
     const cacheKey = generateCacheKey(...args);
     const cachedValue = cache[cacheKey];
 
@@ -20,6 +20,9 @@ export const memoizeFunction = <
       return result;
     }
 
+    console.log(cache);
     return cachedValue;
   };
+
+  return memoize as ResultFunction;
 };
