@@ -1,3 +1,4 @@
+import { DefaultStorage } from "./../default-storage/default-storage.class";
 import { memoizeFunction } from "./memoize-function.function";
 
 type Input = {
@@ -10,42 +11,55 @@ type GetFullNamesFunction = (input: Input[]) => string[];
 
 describe("memoizeFunction", () => {
   describe("functions to manage cache", () => {
-    it("should contain get function", () => {
-      const memoized = memoizeFunction((n: number) => n * 10);
+    let memoized = memoizeFunction((n: number) => n * 10);
 
-      memoized(10);
-      memoized(40);
-      expect(memoized.get()).toEqual({ _10_: 100, _40_: 400 });
+    beforeEach(() => {
+      memoized = memoizeFunction((n: number) => n * 10);
     });
 
-    it("should contain find function", () => {
-      const memoized = memoizeFunction((n: number) => n * 10);
-
+    it("should contain length function to return amount of active elements", () => {
       memoized(10);
       memoized(40);
-      expect(memoized.find("")).toBeUndefined();
-      expect(memoized.find("_40_")).toEqual(400);
+      memoized(70);
+
+      expect(memoized.storage.length()).toEqual(3);
     });
 
-    it("should contain delete function", () => {
-      const memoized = memoizeFunction((n: number) => n * 10);
-
+    it("should contain getItem function to return item value by key", () => {
       memoized(10);
       memoized(40);
-      expect(memoized.delete("")).toBeUndefined();
-      expect(Object.keys(memoized.get())).toHaveLength(2);
 
-      expect(memoized.delete("_10_")).toEqual(100);
-      expect(Object.keys(memoized.get())).toHaveLength(1);
+      expect(memoized.storage.getItem("")).toBeNull();
+      expect(memoized.storage.getItem("_10_")).toEqual(100);
     });
 
-    it("should contain clear function", () => {
-      const memoized = memoizeFunction((n: number) => n * 10);
+    it("should contain setItem function to set item value", () => {
+      memoized.storage.setItem("_10_", 100);
+      expect(memoized.storage.getItem("_10_")).toEqual(100);
+    });
 
+    it("should contain removeItem function to remove an item by key", () => {
       memoized(10);
       memoized(40);
-      expect(memoized.clear());
-      expect(Object.keys(memoized.get())).toHaveLength(0);
+
+      memoized.storage.removeItem("_10_");
+      expect(memoized.storage.length()).toEqual(1);
+    });
+
+    it("should contain key function to return key name by index", () => {
+      memoized(10);
+      memoized(40);
+
+      expect(memoized.storage.key(2)).toBeNull();
+      expect(memoized.storage.key(1)).toEqual("_40_");
+    });
+
+    it("should contain clear function to clear all cached values", () => {
+      memoized(10);
+      memoized(40);
+
+      memoized.storage.clear();
+      expect(memoized.storage.length()).toEqual(0);
     });
   });
 

@@ -1,4 +1,7 @@
+import { DefaultStorage } from "../default-storage/default-storage.class";
 import { generateCacheKey } from "../generate-cache-key/generate-cache-key.function";
+
+import { Storage } from "../default-storage/default-storage.type";
 
 export const memoizeFunction = <
   ResultFunction extends (
@@ -6,27 +9,24 @@ export const memoizeFunction = <
     ...args: any[]
   ) => ReturnType<ResultFunction>
 >(
-  callback: ResultFunction
+  callback: ResultFunction,
+  storage: Storage<ReturnType<ResultFunction>> = new DefaultStorage<
+    ReturnType<ResultFunction>
+  >()
 ) => {
   interface CacheHelpers {
-    get: () => Cache;
-    clear: () => void;
-    find: (key: string) => ReturnType<ResultFunction>;
-    delete: (key: string) => ReturnType<ResultFunction>;
+    storage: Storage<ReturnType<ResultFunction>>;
   }
 
   type ResultType = ResultFunction & CacheHelpers;
-  type Cache = { [key: string]: ReturnType<ResultFunction> };
-
-  let cache: Cache = {};
 
   const memoize = (...args: any[]): ReturnType<ResultFunction> => {
     const cacheKey = generateCacheKey(...args);
-    const cachedValue = cache[cacheKey];
+    const cachedValue = storage.getItem(cacheKey);
 
     if (!cachedValue) {
       const result = callback.apply(this, args);
-      cache[cacheKey] = result;
+      storage.setItem(cacheKey, result);
 
       return result;
     }
@@ -36,20 +36,7 @@ export const memoizeFunction = <
 
   const parsedMemoize = memoize as ResultType;
 
-  parsedMemoize.get = () => cache;
+  parsedMemoize.storage = storage;
 
-  parsedMemoize.find = (key: string) => cache[key];
-
-  parsedMemoize.delete = (key: string) => {
-    const cacheValue = cache[key];
-    delete cache[key];
-
-    return cacheValue;
-  };
-
-  parsedMemoize.clear = () => {
-    cache = {};
-  };
-
-  return memoize as ResultType;
+  return parsedMemoize;
 };
