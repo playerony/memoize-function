@@ -14,9 +14,13 @@ describe("isPrimitive", () => {
   it("should return false if the passed parameter is not a primitive one", () => {
     class TestClass {}
 
+    expect(
+      isPrimitive(() => {
+        return 5;
+      })
+    ).toBeFalsy();
     expect(isPrimitive({})).toBeFalsy();
     expect(isPrimitive([])).toBeFalsy();
-    expect(isPrimitive(() => {})).toBeFalsy();
     expect(isPrimitive(TestClass)).toBeFalsy();
     expect(isPrimitive(new TestClass())).toBeFalsy();
   });

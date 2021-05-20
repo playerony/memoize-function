@@ -1,6 +1,6 @@
 import { isPrimitive } from "../is-primitive/is-primitive.function";
 
-export const toString = (value: any): string => {
+export const toString = (value: unknown): string => {
   if (isPrimitive(value)) {
     return String(value);
   }
