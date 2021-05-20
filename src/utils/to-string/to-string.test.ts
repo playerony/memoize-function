@@ -31,12 +31,18 @@ describe("toString", () => {
   });
 
   it("should parse passed class depends if it's an instance or function", () => {
-    class TestClass {}
+    class TestClass {
+      private value: number = 5;
 
-    const expectedResult = "functionTestClass(){}";
+      public getValue(): number {
+        return this.value;
+      }
+    }
 
-    expect(toString(new TestClass())).toEqual("{}");
-    expect(toString(TestClass)).toEqual(expectedResult);
+    const expectedResult = '{"value":5}';
+
+    expect(toString(new TestClass())).toEqual(expectedResult);
+    expect(toString(TestClass)).toEqual("functionTestClass(){this.value=5;}");
   });
 
   it("should parse passed function to string", () => {

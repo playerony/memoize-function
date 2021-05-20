@@ -16,9 +16,20 @@ describe("generateCacheKey", () => {
   });
 
   it("should return proper key for multiple parameters", () => {
-    expect(generateCacheKey(1, 2, 3, 4, 5, 6, 7)).toEqual("[1_2_3_4_5_6_7]");
-    expect(generateCacheKey([1, 2, 4], true, null)).toEqual(
-      "[[1,2,4]_true_null]"
+    expect(
+      generateCacheKey(
+        [1, { x: 5, y: 10 }, 4],
+        () => {
+          return 50;
+        },
+        null,
+        undefined,
+        NaN,
+        [1, [2, [3, [4, [5, [6], [7, 8]]]]]],
+        { x: { y: { z: { deep: "clone" } } } }
+      )
+    ).toEqual(
+      '[[1,{"x":5,"y":10},4]_function(){return50;}_null_undefined_NaN_[1,[2,[3,[4,[5,[6],[7,8]]]]]]_{"x":{"y":{"z":{"deep":"clone"}}}}]'
     );
   });
 });
