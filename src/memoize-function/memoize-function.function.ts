@@ -1,7 +1,16 @@
-import { DefaultStorage } from "../default-storage/default-storage.class";
-import { generateCacheKey } from "../generate-cache-key/generate-cache-key.function";
+import { DefaultStorage } from "../storage/default-storage/default-storage.class";
+import { generateCacheKey as generateCacheKeyDefault } from "../generate-cache-key/generate-cache-key.function";
 
-import { Storage } from "../default-storage/default-storage.type";
+import { Storage } from "../storage/shared/storage.class";
+
+interface CacheHelpers<ResultType> {
+  storage: Storage<ResultType>;
+}
+
+interface Options<ResultType> {
+  storage?: Storage<ResultType>;
+  generateCacheKey?: (...args: any[]) => string;
+}
 
 export const memoizeFunction = <
   ResultFunction extends (
@@ -10,15 +19,14 @@ export const memoizeFunction = <
   ) => ReturnType<ResultFunction>
 >(
   callback: ResultFunction,
-  storage: Storage<ReturnType<ResultFunction>> = new DefaultStorage<
-    ReturnType<ResultFunction>
-  >()
+  options: Options<ReturnType<ResultFunction>> = {}
 ) => {
-  interface CacheHelpers {
-    storage: Storage<ReturnType<ResultFunction>>;
-  }
+  type ResultType = ResultFunction & CacheHelpers<ReturnType<ResultFunction>>;
 
-  type ResultType = ResultFunction & CacheHelpers;
+  const {
+    generateCacheKey = generateCacheKeyDefault,
+    storage = new DefaultStorage<ReturnType<ResultFunction>>(),
+  } = options;
 
   const memoize = (...args: any[]): ReturnType<ResultFunction> => {
     const cacheKey = generateCacheKey(...args);

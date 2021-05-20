@@ -1,4 +1,4 @@
-import { DefaultStorage } from "./../default-storage/default-storage.class";
+import { DefaultStorage } from "../storage/default-storage/default-storage.class";
 import { memoizeFunction } from "./memoize-function.function";
 
 type Input = {
