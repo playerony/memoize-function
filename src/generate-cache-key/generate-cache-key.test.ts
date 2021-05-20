@@ -12,7 +12,11 @@ describe("generateCacheKey", () => {
     expect(generateCacheKey(NaN)).toEqual("[NaN]");
     expect(generateCacheKey(null)).toEqual("[null]");
     expect(generateCacheKey("test")).toEqual("[test]");
-    expect(generateCacheKey(() => {})).toEqual("[function(){}]");
+    expect(
+      generateCacheKey(() => {
+        return 5;
+      })
+    ).toEqual("[function(){return5;}]");
   });
 
   it("should return proper key for multiple parameters", () => {

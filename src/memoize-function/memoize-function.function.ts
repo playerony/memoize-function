@@ -3,6 +3,13 @@ import { generateCacheKey as generateCacheKeyDefault } from "../generate-cache-k
 
 import { Options, MemoizeFunctionObject } from "./memoize-function.type";
 
+type ResultType<
+  ResultFunction extends (
+    this: any,
+    ...args: any[]
+  ) => ReturnType<ResultFunction>
+> = ResultFunction & MemoizeFunctionObject<ReturnType<ResultFunction>>;
+
 export const memoizeFunction = <
   ResultFunction extends (
     this: any,
@@ -11,7 +18,7 @@ export const memoizeFunction = <
 >(
   callback: ResultFunction,
   options: Options<ReturnType<ResultFunction>> = {}
-) => {
+): ResultType<ReturnType<ResultFunction>> => {
   const {
     generateCacheKey = generateCacheKeyDefault,
     storage = new DefaultStorage<ReturnType<ResultFunction>>(),
@@ -31,10 +38,7 @@ export const memoizeFunction = <
     return cachedValue;
   };
 
-  type ResultType = ResultFunction &
-    MemoizeFunctionObject<ReturnType<ResultFunction>>;
-
-  const parsedMemoize = memoize as ResultType;
+  const parsedMemoize = memoize as ResultType<ReturnType<ResultFunction>>;
 
   parsedMemoize.storage = storage;
 

@@ -1,1 +1,1 @@
-export const isPrimitive = (value: any): boolean => value !== Object(value);
+export const isPrimitive = (value: unknown): boolean => value !== Object(value);
