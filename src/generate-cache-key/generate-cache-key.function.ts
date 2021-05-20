@@ -1,8 +1,8 @@
-import { toString } from "../to-string/to-string.function";
+import { toString } from "../utils";
 
 export const generateCacheKey = (...args: any[]): string => {
-  const prefix = "_";
-  const suffix = "_";
+  const prefix = "[";
+  const suffix = "]";
   const joinString = "_";
 
   if (!args?.length) {

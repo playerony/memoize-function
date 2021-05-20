@@ -1,1 +1,1 @@
-export type Cache<CacheResult> = { [key: string]: CacheResult };
+export type Cache<CacheValue> = { [key: string]: CacheValue };

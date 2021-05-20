@@ -1,8 +1,8 @@
+import { Storage } from "../shared";
 import { Cache } from "./default-storage.type";
-import { Storage } from "../shared/storage.class";
 
-export class DefaultStorage<CacheItem> implements Storage<CacheItem> {
-  private cache!: Cache<CacheItem>;
+export class DefaultStorage<CacheValue> implements Storage<CacheValue> {
+  private cache!: Cache<CacheValue>;
 
   constructor() {
     this.cache = {};
@@ -12,7 +12,7 @@ export class DefaultStorage<CacheItem> implements Storage<CacheItem> {
     this.cache = {};
   }
 
-  public getItem(key: string): CacheItem | null {
+  public getItem(key: string): CacheValue | null {
     return this.cache[key] || null;
   }
 
@@ -26,7 +26,7 @@ export class DefaultStorage<CacheItem> implements Storage<CacheItem> {
     delete this.cache[key];
   }
 
-  public setItem(key: string, value: CacheItem): void {
+  public setItem(key: string, value: CacheValue): void {
     this.cache[key] = value;
   }
 

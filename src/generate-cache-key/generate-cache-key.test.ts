@@ -6,19 +6,19 @@ describe("generateCacheKey", () => {
   });
 
   it("should return proper key for single parameter", () => {
-    expect(generateCacheKey(1)).toEqual("_1_");
-    expect(generateCacheKey([])).toEqual("_[]_");
-    expect(generateCacheKey({})).toEqual("_{}_");
-    expect(generateCacheKey(NaN)).toEqual("_NaN_");
-    expect(generateCacheKey(null)).toEqual("_null_");
-    expect(generateCacheKey("test")).toEqual("_test_");
-    expect(generateCacheKey(() => {})).toEqual("_function(){}_");
+    expect(generateCacheKey(1)).toEqual("[1]");
+    expect(generateCacheKey([])).toEqual("[[]]");
+    expect(generateCacheKey({})).toEqual("[{}]");
+    expect(generateCacheKey(NaN)).toEqual("[NaN]");
+    expect(generateCacheKey(null)).toEqual("[null]");
+    expect(generateCacheKey("test")).toEqual("[test]");
+    expect(generateCacheKey(() => {})).toEqual("[function(){}]");
   });
 
   it("should return proper key for multiple parameters", () => {
-    expect(generateCacheKey(1, 2, 3, 4, 5, 6, 7)).toEqual("_1_2_3_4_5_6_7_");
+    expect(generateCacheKey(1, 2, 3, 4, 5, 6, 7)).toEqual("[1_2_3_4_5_6_7]");
     expect(generateCacheKey([1, 2, 4], true, null)).toEqual(
-      "_[1,2,4]_true_null_"
+      "[[1,2,4]_true_null]"
     );
   });
 });

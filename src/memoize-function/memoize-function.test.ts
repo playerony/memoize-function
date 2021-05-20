@@ -1,4 +1,3 @@
-import { DefaultStorage } from "../storage/default-storage/default-storage.class";
 import { memoizeFunction } from "./memoize-function.function";
 
 type Input = {
@@ -30,19 +29,19 @@ describe("memoizeFunction", () => {
       memoized(40);
 
       expect(memoized.storage.getItem("")).toBeNull();
-      expect(memoized.storage.getItem("_10_")).toEqual(100);
+      expect(memoized.storage.getItem("[10]")).toEqual(100);
     });
 
     it("should contain setItem function to set item value", () => {
-      memoized.storage.setItem("_10_", 100);
-      expect(memoized.storage.getItem("_10_")).toEqual(100);
+      memoized.storage.setItem("[10]", 100);
+      expect(memoized.storage.getItem("[10]")).toEqual(100);
     });
 
     it("should contain removeItem function to remove an item by key", () => {
       memoized(10);
       memoized(40);
 
-      memoized.storage.removeItem("_10_");
+      memoized.storage.removeItem("[10]");
       expect(memoized.storage.length()).toEqual(1);
     });
 
@@ -51,7 +50,7 @@ describe("memoizeFunction", () => {
       memoized(40);
 
       expect(memoized.storage.key(2)).toBeNull();
-      expect(memoized.storage.key(1)).toEqual("_40_");
+      expect(memoized.storage.key(1)).toEqual("[40]");
     });
 
     it("should contain clear function to clear all cached values", () => {
