@@ -5,7 +5,7 @@ export const generateCacheKey = (...args: any[]): string => {
   const suffix = "]";
   const joinString = "_";
 
-  if (!args?.length) {
+  if (!args.length) {
     return "";
   }
 

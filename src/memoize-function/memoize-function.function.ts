@@ -1,14 +1,7 @@
-import { DefaultStorage } from "../storage/default-storage";
-import { generateCacheKey as generateCacheKeyDefault } from "../generate-cache-key/generate-cache-key.function";
+import { DefaultStorage } from "../storage";
+import { generateCacheKey as generateCacheKeyDefault } from "..";
 
-import { Options, MemoizeFunctionObject } from "./memoize-function.type";
-
-type ResultType<
-  ResultFunction extends (
-    this: any,
-    ...args: any[]
-  ) => ReturnType<ResultFunction>
-> = ResultFunction & MemoizeFunctionObject<ReturnType<ResultFunction>>;
+import { Options, ResultType } from "./memoize-function.type";
 
 export const memoizeFunction = <
   ResultFunction extends (
@@ -18,7 +11,7 @@ export const memoizeFunction = <
 >(
   callback: ResultFunction,
   options: Options<ReturnType<ResultFunction>> = {}
-): ResultType<ReturnType<ResultFunction>> => {
+): ResultType<ResultFunction> => {
   const {
     generateCacheKey = generateCacheKeyDefault,
     storage = new DefaultStorage<ReturnType<ResultFunction>>(),
@@ -38,7 +31,7 @@ export const memoizeFunction = <
     return cachedValue;
   };
 
-  const parsedMemoize = memoize as ResultType<ReturnType<ResultFunction>>;
+  const parsedMemoize = memoize as ResultType<ResultFunction>;
 
   parsedMemoize.storage = storage;
 

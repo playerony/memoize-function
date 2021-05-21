@@ -1,3 +1,4 @@
+import { Storage } from "..";
 import { memoizeFunction } from "./memoize-function.function";
 
 type Input = {
@@ -9,7 +10,7 @@ type MultipleBy10Function = (value: number) => number;
 type GetFullNamesFunction = (input: Input[]) => string[];
 
 describe("memoizeFunction", () => {
-  describe("functions to manage cache", () => {
+  describe("functions to manage storage", () => {
     let memoized = memoizeFunction((n: number) => n * 10);
 
     beforeEach(() => {
@@ -50,6 +51,7 @@ describe("memoizeFunction", () => {
       memoized(40);
 
       expect(memoized.storage.key(2)).toBeNull();
+      expect(memoized.storage.key(0)).toEqual("[10]");
       expect(memoized.storage.key(1)).toEqual("[40]");
     });
 
@@ -145,6 +147,66 @@ describe("memoizeFunction", () => {
       memoizedGetFullNames(inputData);
 
       expect(getFullNames).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("custom options", () => {
+    it("user should be able to create its own version of generateCacheKey function", () => {
+      const memoized = memoizeFunction(
+        (valueA: number, valueB: number) => valueA * valueB,
+        {
+          generateCacheKey: (): string => "always_the_same_value",
+        }
+      );
+
+      expect(memoized(10, 10)).toEqual(100);
+      expect(memoized(20, 20)).toEqual(100);
+      expect(memoized(30, 30)).toEqual(100);
+    });
+
+    it("user should be able to create custom storage", () => {
+      class CustomStorage implements Storage<number> {
+        private cache: number;
+
+        constructor() {
+          this.cache = 0;
+        }
+
+        public clear(): void {
+          this.cache = 0;
+        }
+
+        public getItem(): number | null {
+          return this.cache;
+        }
+
+        public key(): string {
+          return String(this.cache);
+        }
+
+        public length(): number {
+          return 1;
+        }
+
+        public removeItem(): void {
+          this.cache = 0;
+        }
+
+        public setItem(key: string, value: number): void {
+          this.cache = value;
+        }
+      }
+
+      const memoized = memoizeFunction(
+        (valueA: number, valueB: number) => valueA * valueB,
+        {
+          storage: new CustomStorage(),
+        }
+      );
+
+      expect(memoized(10, 10)).toEqual(100);
+      expect(memoized(20, 20)).toEqual(100);
+      expect(memoized(30, 30)).toEqual(100);
     });
   });
 });

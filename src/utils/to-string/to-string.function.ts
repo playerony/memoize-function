@@ -1,4 +1,4 @@
-import { isPrimitive } from "../is-primitive/is-primitive.function";
+import { isPrimitive } from "..";
 
 export const toString = (value: unknown): string => {
   if (isPrimitive(value)) {

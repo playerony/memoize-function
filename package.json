@@ -1,14 +1,18 @@
 {
   "name": "memoize-function",
   "version": "1.0.0",
-  "description": "A memoization library which remember all invocations",
-  "main": "index.js",
+  "description": "A memoization library that remembers all function invocations",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
+    "build": "tsc",
     "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --collectCoverage",
+    "open:coverage": "open ./coverage/lcov-report/src/index.html",
     "typecheck": "tsc --noEmit",
     "lint": "eslint --ext .ts \"src/**/*\"",
-    "format": "prettier --write \"src/**/*\"",
-    "build": "tsc --emitDeclarationOnly --declaration --outDir ./dist"
+    "format": "prettier --write \"src/**/*\""
   },
   "keywords": [
     "cache",
