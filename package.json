@@ -1,7 +1,7 @@
 {
   "name": "memoize-function",
   "version": "1.0.0",
-  "description": "A memoization library that remembers all function invocations",
+  "description": "A memoization library that caches all results and supports *N* arguments with any type.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -22,7 +22,7 @@
     "performance",
     "memoize-function"
   ],
-  "author": "Paweł Wojtasiński <pawel.wojtasinski.1995@gmail.com>",
+  "author": "Paweł Wojtasiński",
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^26.0.23",
@@ -35,6 +35,7 @@
     "jest": "^26.6.3",
     "prettier": "^2.3.0",
     "ts-jest": "^26.5.6",
+    "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
   }
 }

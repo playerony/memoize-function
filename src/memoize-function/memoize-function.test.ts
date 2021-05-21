@@ -1,4 +1,4 @@
-import { Storage } from "..";
+import { Storage } from "../storage";
 import { memoizeFunction } from "./memoize-function.function";
 
 type Input = {
@@ -17,42 +17,25 @@ describe("memoizeFunction", () => {
       memoized = memoizeFunction((n: number) => n * 10);
     });
 
-    it("should contain length function to return amount of active elements", () => {
-      memoized(10);
-      memoized(40);
-      memoized(70);
-
-      expect(memoized.storage.length()).toEqual(3);
-    });
-
-    it("should contain getItem function to return item value by key", () => {
+    it("should contain get function to return item value by key", () => {
       memoized(10);
       memoized(40);
 
-      expect(memoized.storage.getItem("")).toBeNull();
-      expect(memoized.storage.getItem("[10]")).toEqual(100);
+      expect(memoized.storage.get("")).toBeNull();
+      expect(memoized.storage.get("[10]")).toEqual(100);
     });
 
-    it("should contain setItem function to set item value", () => {
-      memoized.storage.setItem("[10]", 100);
-      expect(memoized.storage.getItem("[10]")).toEqual(100);
+    it("should contain set function to set item value", () => {
+      memoized.storage.set("[10]", 100);
+      expect(memoized.storage.get("[10]")).toEqual(100);
     });
 
-    it("should contain removeItem function to remove an item by key", () => {
+    it("should contain remove function to remove an item by key", () => {
       memoized(10);
       memoized(40);
 
-      memoized.storage.removeItem("[10]");
-      expect(memoized.storage.length()).toEqual(1);
-    });
-
-    it("should contain key function to return key name by index", () => {
-      memoized(10);
-      memoized(40);
-
-      expect(memoized.storage.key(2)).toBeNull();
-      expect(memoized.storage.key(0)).toEqual("[10]");
-      expect(memoized.storage.key(1)).toEqual("[40]");
+      memoized.storage.remove("[10]");
+      expect(memoized.storage.get("[10]")).toBeNull();
     });
 
     it("should contain clear function to clear all cached values", () => {
@@ -60,7 +43,8 @@ describe("memoizeFunction", () => {
       memoized(40);
 
       memoized.storage.clear();
-      expect(memoized.storage.length()).toEqual(0);
+      expect(memoized.storage.get("[10]")).toBeNull();
+      expect(memoized.storage.get("[40]")).toBeNull();
     });
   });
 
@@ -176,23 +160,15 @@ describe("memoizeFunction", () => {
           this.cache = 0;
         }
 
-        public getItem(): number | null {
+        public get(): number | null {
           return this.cache;
         }
 
-        public key(): string {
-          return String(this.cache);
-        }
-
-        public length(): number {
-          return 1;
-        }
-
-        public removeItem(): void {
+        public remove(): void {
           this.cache = 0;
         }
 
-        public setItem(key: string, value: number): void {
+        public set(key: string, value: number): void {
           this.cache = value;
         }
       }

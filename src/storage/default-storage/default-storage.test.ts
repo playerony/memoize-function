@@ -1,4 +1,4 @@
-import { Storage } from "../shared";
+import { Storage } from "./default-storage.type";
 import { DefaultStorage } from "./default-storage.class";
 
 describe("DefaultStorage", () => {
@@ -8,50 +8,33 @@ describe("DefaultStorage", () => {
     storage = new DefaultStorage<number>();
   });
 
-  it("should contain setItem and getItem methods", () => {
-    storage.setItem("key5", 5);
-    storage.setItem("key7", 7);
+  it("should contain set and get methods", () => {
+    storage.set("key5", 5);
+    storage.set("key7", 7);
 
-    expect(storage.getItem("key5")).toEqual(5);
-    expect(storage.getItem("key7")).toEqual(7);
-    expect(storage.getItem("random_key")).toBeNull();
+    expect(storage.get("key5")).toEqual(5);
+    expect(storage.get("key7")).toEqual(7);
+    expect(storage.get("random_key")).toBeNull();
   });
 
-  it("should contain length method", () => {
-    storage.setItem("key1", 1);
-    storage.setItem("key2", 2);
-    storage.setItem("key3", 3);
+  it("should contain remove method", () => {
+    storage.set("key1", 1);
+    storage.set("key2", 2);
+    storage.set("key3", 3);
 
-    expect(storage.length()).toEqual(3);
-  });
-
-  it("should contain removeItem method", () => {
-    storage.setItem("key1", 1);
-    storage.setItem("key2", 2);
-    storage.setItem("key3", 3);
-    expect(storage.length()).toEqual(3);
-
-    storage.removeItem("key2");
-    expect(storage.length()).toEqual(2);
-  });
-
-  it("should contain key method", () => {
-    storage.setItem("key1", 1);
-    storage.setItem("key2", 2);
-    storage.setItem("key3", 3);
-
-    expect(storage.key(10)).toBeNull();
-    expect(storage.key(1)).toEqual("key2");
-    expect(storage.key(2)).toEqual("key3");
+    storage.remove("key2");
+    expect(storage.get("key2")).toBeNull();
   });
 
   it("should contain clear method", () => {
-    storage.setItem("key1", 1);
-    storage.setItem("key2", 2);
-    storage.setItem("key3", 3);
+    storage.set("key1", 1);
+    storage.set("key2", 2);
+    storage.set("key3", 3);
 
     storage.clear();
 
-    expect(storage.length()).toEqual(0);
+    expect(storage.get("key1")).toBeNull();
+    expect(storage.get("key2")).toBeNull();
+    expect(storage.get("key3")).toBeNull();
   });
 });

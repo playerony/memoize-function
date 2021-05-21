@@ -6,7 +6,7 @@ export const generateCacheKey = (...args: any[]): string => {
   const joinString = "_";
 
   if (!args.length) {
-    return "";
+    return "[no_arguments]";
   }
 
   const parsedArgs = args.map(toString);
