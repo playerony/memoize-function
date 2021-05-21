@@ -1,5 +1,5 @@
 import { DefaultStorage } from "../storage";
-import { generateCacheKey as generateCacheKeyDefault } from "..";
+import { generateCacheKey as generateCacheKeyDefault } from "../generate-cache-key/generate-cache-key.function";
 
 import { Options, ResultType } from "./memoize-function.type";
 
@@ -19,11 +19,11 @@ export const memoizeFunction = <
 
   const memoize = (...args: any[]): ReturnType<ResultFunction> => {
     const cacheKey = generateCacheKey(...args);
-    const cachedValue = storage.getItem(cacheKey);
+    const cachedValue = storage.get(cacheKey);
 
     if (!cachedValue) {
       const result = callback.apply(this, args);
-      storage.setItem(cacheKey, result);
+      storage.set(cacheKey, result);
 
       return result;
     }
