@@ -1,6 +1,6 @@
 import { Storage } from "../storage";
 
-interface MemoizeFunctionObject<ResultType> {
+export interface MemoizeFunctionObject<ResultType> {
   storage: Storage<ResultType>;
 }
 
