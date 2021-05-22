@@ -19,7 +19,7 @@ npm install memoize-function --save
 ## Usage
 
 ```js
-const { memoizeFunction } = require("memoize-function");
+const memoizeFunction = require("memoize-function");
 
 const factorial = memoizeFunction((value) => {
   if (value <= 1) {
