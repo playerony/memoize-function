@@ -32,3 +32,77 @@ const factorial = memoizeFunction((value) => {
 factorial(50);
 factorial(20); // Value from cache
 ```
+
+### Custom storage
+
+It is possible to pass a custom storage to be used.
+
+```js
+const memoized = memoizeFunction(fn, {
+  storage: {
+    store: {},
+    clear() {
+      this.store = {};
+    },
+    remove(key) {
+      delete this.store[key];
+    },
+    set(key, value) {
+      this.store[key] = value;
+    },
+    get(key) {
+      return this.store[key] || null;
+    },
+  },
+});
+```
+
+```js
+class Storage {
+  store;
+
+  constructor() {
+    this.store = {};
+  }
+
+  clear() {
+    this.store = {};
+  }
+
+  remove(key) {
+    delete this.store[key];
+  }
+
+  get(key) {
+    return this.store[key] || null;
+  }
+
+  set(key, value) {
+    this.store[key] = value;
+  }
+}
+
+const memoized = memoizeFunction(fn, {
+  storage: new Storage(),
+});
+```
+
+The custom cache can be a class or an object implementing the following methods:
+
+- `get`
+- `set`
+- `clear`
+- `remove`
+
+### Custom cache key generator
+
+To use a custom cache key generator:
+
+```js
+const generateCacheKey = (...args) =>
+  "my_custom_key_for_each_function_argument";
+
+const memoized = memoizeFunction(fn, {
+  generateCacheKey,
+});
+```

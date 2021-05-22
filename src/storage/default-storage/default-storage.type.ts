@@ -5,4 +5,4 @@ export interface Storage<CacheValue> {
   set: (key: string, value: CacheValue) => void;
 }
 
-export type Cache<CacheValue> = { [key: string]: CacheValue };
+export type ObjectCache<CacheValue> = { [key: string]: CacheValue };

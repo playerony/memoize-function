@@ -1,7 +1,7 @@
-import { Cache, Storage } from "./default-storage.type";
+import { ObjectCache, Storage } from "./default-storage.type";
 
 export class DefaultStorage<CacheValue> implements Storage<CacheValue> {
-  private cache!: Cache<CacheValue>;
+  private cache!: ObjectCache<CacheValue>;
 
   constructor() {
     this.cache = {};
